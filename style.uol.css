@@ -1,0 +1,65 @@
+body{
+    background: #E5E5E5;
+}
+header{
+    background: #FFFFFF;
+    height: 80px;
+    width: 100%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    left: 0;
+    top: 0;
+    
+}
+header img{
+    position: absolute;
+    width: 75px;
+    height: 53px;
+    top: 16px;
+    left: 22px;
+}
+header ion-icon{
+    font-size: 45px;
+    position: absolute;
+    top: 18px;
+    right: 21px;
+}
+main{
+    padding-top: 106px;
+}
+.caixaMensagem{
+    width: 100%;
+    border-radius: 2px;
+    margin-bottom: 4px;
+    padding: 13px 8px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left;
+
+    font-weight: 400;
+    background: #FFDEDE;
+}
+
+
+
+footer{
+    background: #FFFFFF;
+    height: 80px;
+    width: 100%;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+footer ion-icon{
+    font-size: 26px;
+    position: absolute;
+    right: 18px;
+    bottom: 27px;
+}
