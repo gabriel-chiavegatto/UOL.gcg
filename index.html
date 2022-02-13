@@ -13,20 +13,42 @@
 
 </head>
 <body>
+
     <header>
         <img src="logo 1.png" alt="logo-UOL">
         <ion-icon name="people"></ion-icon>
     </header>
-    <main>
+
+    <main class="feed">
+        <div class="log">
+            <p>
+                <span class="hora">(09:22:28)</span>
+                <span class="usuario remetente">João</span>
+                <span class="açao">entrou na sala...</span>
+            </p>
+        </div>
+
         <div class="caixaMensagem"> 
-            <p>(09:22:28)  João para Todos:  Bom dia</p>
+            <p>
+                <span class="hora">(09:22:28)</span>
+                <span class="usuario remetente">João</span>   
+                <span class="paraQuem">para</span>
+                <span class="usuario destinatário">Todos</span>: 
+                <span class="texto">Bom dia</span> 
+            </p>
         </div>
     </main>
+
     <footer>
-        <input type="text">
-        <ion-icon name="paper-plane-outline"></ion-icon>
+        <input class="mensagemDigitada" type="text" placeholder="Escreva aqui..." >
+        <button onclick="converterTextoEmMensagem(this)">
+            <ion-icon name="paper-plane-outline"></ion-icon>
+        </button>
     </footer>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="script.uol.js"></script>
+
 </body>
 </html>
