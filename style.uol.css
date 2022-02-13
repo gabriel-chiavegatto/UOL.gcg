@@ -55,7 +55,7 @@ main{
 .caixaMensagem{
     background: #FFFFFF;
 }
-.msgDireta{
+.privada{
     background: #FFDEDE;
 }
 .hora{
@@ -64,7 +64,9 @@ main{
 .usuario{
     font-weight: 700;
 }
-
+.fantasma{
+    height: 80px;
+}
 
 
 footer{
