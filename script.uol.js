@@ -36,7 +36,7 @@ function processarRespostas(respostas) {
 
         if (respostas.data[i].type === "message") {
             main.innerHTML += `
-        <div class="caixaMensagem"> 
+        <div class="caixaMensagem" data-identifier="message"> 
             <p>
                 <span class="hora">(${respostas.data[i].time})</span>
                 <span class="usuario remetente">${respostas.data[i].from}</span>   
@@ -50,7 +50,7 @@ function processarRespostas(respostas) {
 
         if (respostas.data[i].type === "private_message") {
             main.innerHTML += `
-         <div class="caixaMensagem privada"> 
+         <div class="caixaMensagem privada" data-identifier="message"> 
             <p>
                 <span class="hora">(${respostas.data[i].time})</span>
                 <span class="usuario remetente">${respostas.data[i].from}</span>   
@@ -79,7 +79,7 @@ function processarRespostas(respostas) {
 
     if (respostas.data[ultimoElemento].type === "message") {
         main.innerHTML += `
-        <div class="caixaMensagem scroll"> 
+        <div class="caixaMensagem scroll " data-identifier="message"> 
             <p>
                 <span class="hora">(${respostas.data[ultimoElemento].time})</span>
                 <span class="usuario remetente">${respostas.data[ultimoElemento].from}</span>   
@@ -93,7 +93,7 @@ function processarRespostas(respostas) {
 
     if (respostas.data[ultimoElemento].type === "private_message") {
         main.innerHTML += `
-         <div class="caixaMensagem privada scroll"> 
+         <div class="caixaMensagem privada scroll" data-identifier="message"> 
             <p>
                 <span class="hora">(${respostas.data[ultimoElemento].time})</span>
                 <span class="usuario remetente">${respostas.data[ultimoElemento].from}</span>   
@@ -109,24 +109,6 @@ function processarRespostas(respostas) {
 }
 function processarErroGet(erro) {
     console("deu ruim no GET")
-}
-
-function retornarHora() {
-    const horario = new Date;
-    let hora = horario.getHours();
-    let minutos = horario.getMinutes();
-    let segundos = horario.getSeconds();
-    if (hora < 10) {
-        hora = `0${hora}`;
-    }
-    if (minutos < 10) {
-        minutos = `0${minutos}`;
-    }
-    if (segundos < 10) {
-        segundos = `0${segundos}`;
-    }
-    horarioDoEnvio = hora + ":" + minutos + ":" + segundos;
-
 }
 
 function entrarNaSala() {
@@ -199,13 +181,3 @@ function scrollToEnd() {
         mensagemParaScrollar.classList.remove("scroll");
     }
 }
-
-
-
-
-
-
-
-
-
-
