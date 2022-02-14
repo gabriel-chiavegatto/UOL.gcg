@@ -1,5 +1,11 @@
-const promessa = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages");
-promessa.then(processarRespostas);
+atualizarPagina();
+// setInterval(atualizarPagina, 3000);
+
+function atualizarPagina() {
+    const promessa = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages");
+    promessa.then(processarRespostas);
+    promessa.catch(processarErroGet);
+}
 
 let usuario;
 let horarioDoEnvio;
@@ -8,8 +14,9 @@ let mensagemEnviada;
 function processarRespostas(respostas) {
     console.log(respostas);
     const main = document.querySelector(".feed");
-
-    for (i = 0; i < 100; i++) {
+    main.innerHTML = "";
+    const ultimoElemento = (respostas.data.length) - 1;
+    for (i = 0; i < ultimoElemento; i++) {
 
         if (respostas.data[i].type === "status") {
             main.innerHTML += `
@@ -23,7 +30,7 @@ function processarRespostas(respostas) {
         `
         }
 
-        if (respostas.data[4].type === "message") {
+        if (respostas.data[i].type === "message") {
             main.innerHTML += `
         <div class="caixaMensagem"> 
             <p>
@@ -37,21 +44,69 @@ function processarRespostas(respostas) {
         `
         }
 
-        if (respostas.data[4].type === "private_message") {
+        if (respostas.data[i].type === "private_message") {
             main.innerHTML += `
-         <div class="caixaMensagem"> 
+         <div class="caixaMensagem privada"> 
             <p>
                 <span class="hora">(${respostas.data[i].time})</span>
                 <span class="usuario remetente">${respostas.data[i].from}</span>   
-                <span class="paraQuem privada">reservadamente para</span>
+                <span class="paraQuem">reservadamente para</span>
                 <span class="usuario destinatário">${respostas.data[i].to}</span>: 
                 <span class="texto">${respostas.data[i].text}</span> 
             </p>
         </div>
         `
         }
+
+        // ultimo elemento e scrollar
+
+        if (respostas.data[ultimoElemento].type === "status") {
+            main.innerHTML += `
+        <div class="log scroll">
+            <p>
+                <span class="hora">(${respostas.data[ultimoElemento].time})</span>
+                <span class="usuario remetente">${respostas.data[ultimoElemento].from}</span>
+                <span class="açao">${respostas.data[ultimoElemento].text}</span>
+            </p>
+        </div>
+        `
+        }
+
+        if (respostas.data[ultimoElemento].type === "message") {
+            main.innerHTML += `
+        <div class="caixaMensagem scroll"> 
+            <p>
+                <span class="hora">(${respostas.data[ultimoElemento].time})</span>
+                <span class="usuario remetente">${respostas.data[ultimoElemento].from}</span>   
+                <span class="paraQuem">para</span>
+                <span class="usuario destinatário">${respostas.data[ultimoElemento].to}</span>: 
+                <span class="texto">${respostas.data[ultimoElemento].text}</span> 
+            </p>
+        </div>
+        `
+        }
+
+        if (respostas.data[ultimoElemento].type === "private_message") {
+            main.innerHTML += `
+         <div class="caixaMensagem privada scroll"> 
+            <p>
+                <span class="hora">(${respostas.data[ultimoElemento].time})</span>
+                <span class="usuario remetente">${respostas.data[ultimoElemento].from}</span>   
+                <span class="paraQuem">reservadamente para</span>
+                <span class="usuario destinatário">${respostas.data[ultimoElemento].to}</span>: 
+                <span class="texto">${respostas.data[ultimoElemento].text}</span> 
+            </p>
+        </div>
+        `
+        }
+        // scrollar e tirar a classe scroll
+        scrollToEnd();
+
     }
     entrarNaSala();
+}
+function processarErroGet(erro) {
+    console("deu ruim no GET")
 }
 
 function retornarHora() {
@@ -73,18 +128,19 @@ function retornarHora() {
 }
 
 function entrarNaSala() {
-    // usuario = prompt("Qual seu nome?");
+    // usuario = prompt("Bem Vindo ao bate-bapo UOL. \nQual seu nome?");
     retornarHora();
     const main = document.querySelector(".feed");
     main.innerHTML += `
-    <div class="log">
+    <div class="log scroll">
             <p>
                 <span class="hora">(${horarioDoEnvio})</span>
                 <span class="usuario remetente">${usuario}</span>
                 <span class="açao">entra na sala...</span>
             </p>
         </div>
-    `
+    `;
+    scrollToEnd();
 }
 
 
@@ -93,15 +149,17 @@ function converterTextoEmMensagem(clique) {
     retornarHora();
     const input = document.querySelector(".mensagemDigitada");
     const text = input.value;
-    mensagemEnviada = text;
-    input.value = "";
-    adicionarCaixaDeMensagem();
+    if (text !== "") {
+        mensagemEnviada = text;
+        input.value = "";
+        adicionarCaixaDeMensagem();
+    }
 }
 
 function adicionarCaixaDeMensagem() {
     const main = document.querySelector(".feed");
     main.innerHTML += `
-    <div class="caixaMensagem"> 
+    <div class="caixaMensagem scroll"> 
             <p>
                 <span class="hora">(${horarioDoEnvio})</span>
                 <span class="usuario remetente">${usuario}</span>   
@@ -111,8 +169,14 @@ function adicionarCaixaDeMensagem() {
             </p>
         </div>
     `
+    scrollToEnd();
 }
 
+function scrollToEnd(){
+    const mensagemParaScrollar = document.querySelector(".scroll");
+    mensagemParaScrollar.scrollIntoView();
+    mensagemParaScrollar.classList.remove("scroll");
+}
 
 
 
