@@ -1,5 +1,12 @@
+let usuarioLogado;
+let horarioDoEnvio;
+let mensagemEnviada;
+
+
+entrarNaSala();
 atualizarPagina();
-// setInterval(atualizarPagina, 3000);
+setInterval(atualizarPagina, 3000);
+
 
 function atualizarPagina() {
     const promessa = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages");
@@ -7,9 +14,6 @@ function atualizarPagina() {
     promessa.catch(processarErroGet);
 }
 
-let usuario;
-let horarioDoEnvio;
-let mensagemEnviada;
 
 function processarRespostas(respostas) {
     console.log(respostas);
@@ -57,11 +61,12 @@ function processarRespostas(respostas) {
         </div>
         `
         }
+    }
 
-        // ultimo elemento e scrollar
-
-        if (respostas.data[ultimoElemento].type === "status") {
-            main.innerHTML += `
+    // ultimo elemento para scrollar
+    
+    if (respostas.data[ultimoElemento].type === "status") {
+        main.innerHTML += `
         <div class="log scroll">
             <p>
                 <span class="hora">(${respostas.data[ultimoElemento].time})</span>
@@ -70,10 +75,10 @@ function processarRespostas(respostas) {
             </p>
         </div>
         `
-        }
+    }
 
-        if (respostas.data[ultimoElemento].type === "message") {
-            main.innerHTML += `
+    if (respostas.data[ultimoElemento].type === "message") {
+        main.innerHTML += `
         <div class="caixaMensagem scroll"> 
             <p>
                 <span class="hora">(${respostas.data[ultimoElemento].time})</span>
@@ -84,10 +89,10 @@ function processarRespostas(respostas) {
             </p>
         </div>
         `
-        }
+    }
 
-        if (respostas.data[ultimoElemento].type === "private_message") {
-            main.innerHTML += `
+    if (respostas.data[ultimoElemento].type === "private_message") {
+        main.innerHTML += `
          <div class="caixaMensagem privada scroll"> 
             <p>
                 <span class="hora">(${respostas.data[ultimoElemento].time})</span>
@@ -98,12 +103,9 @@ function processarRespostas(respostas) {
             </p>
         </div>
         `
-        }
-        // scrollar e tirar a classe scroll
-        scrollToEnd();
-
     }
-    entrarNaSala();
+    // scrollar e tirar a classe scroll
+    scrollToEnd();
 }
 function processarErroGet(erro) {
     console("deu ruim no GET")
@@ -127,52 +129,89 @@ function retornarHora() {
 
 }
 
-function entrarNaSala() {
-    // usuario = prompt("Bem Vindo ao bate-bapo UOL. \nQual seu nome?");
-    retornarHora();
-    const main = document.querySelector(".feed");
-    main.innerHTML += `
-    <div class="log scroll">
-            <p>
-                <span class="hora">(${horarioDoEnvio})</span>
-                <span class="usuario remetente">${usuario}</span>
-                <span class="açao">entra na sala...</span>
-            </p>
-        </div>
-    `;
-    scrollToEnd();
+function entrarNaSala(){
+    const login = prompt("Bem Vindo ao bate-bapo UOL. \nQual seu nome?");
+    usuarioLogado = login;
+    const participante = {
+        name: login
+    }
+    const requisicao = axios.post("https://mock-api.driven.com.br/api/v4/uol/participants", participante);
+    requisicao.then(validarUsuario);
+    requisicao.catch(validacaoDeUsuarioFalhou);
+
+    console.log("entrou na sala");
+
+    setInterval(() => { 
+        manterOnline(login);
+   }, 5000);
+
 }
-
-
-
-function converterTextoEmMensagem(clique) {
-    retornarHora();
-    const input = document.querySelector(".mensagemDigitada");
-    const text = input.value;
-    if (text !== "") {
-        mensagemEnviada = text;
-        input.value = "";
-        adicionarCaixaDeMensagem();
+function validarUsuario(resposta){
+    if(resposta.status == 400){
+        alert("Ja existe um usuário com este nickname, por favor escolha outro nick.");
+        entrarNaSala();
     }
 }
-
-function adicionarCaixaDeMensagem() {
-    const main = document.querySelector(".feed");
-    main.innerHTML += `
-    <div class="caixaMensagem scroll"> 
-            <p>
-                <span class="hora">(${horarioDoEnvio})</span>
-                <span class="usuario remetente">${usuario}</span>   
-                <span class="paraQuem">para</span>
-                <span class="usuario destinatário">Todos</span>: 
-                <span class="texto">${mensagemEnviada}</span> 
-            </p>
-        </div>
-    `
-    scrollToEnd();
+function validacaoDeUsuarioFalhou(erro){
+    console.log("deu erro no post do nome de usuario" + erro);
+}
+function manterOnline(usuario){
+    const manterparticipante = {
+        name: usuario
+    }
+    console.log(manterparticipante);
+    const manterOnline = axios.post("https://mock-api.driven.com.br/api/v4/uol/status", manterparticipante);
+    console.log("deu bom, ta atualizando o login");
 }
 
-function scrollToEnd(){
+
+// function converterTextoEmMensagem(clique) {
+//     retornarHora();
+//     const input = document.querySelector(".mensagemDigitada");
+//     const text = input.value;
+//     if (text !== "") {
+//         mensagemEnviada = text;
+//         input.value = "";
+//         adicionarCaixaDeMensagem();
+//     }
+// }
+
+// function adicionarCaixaDeMensagem() {
+//     const main = document.querySelector(".feed");
+//     main.innerHTML += `
+//     <div class="caixaMensagem scroll"> 
+//             <p>
+//                 <span class="hora">(${horarioDoEnvio})</span>
+//                 <span class="usuario remetente">${usuario}</span>   
+//                 <span class="paraQuem">para</span>
+//                 <span class="usuario destinatário">Todos</span>: 
+//                 <span class="texto">${mensagemEnviada}</span> 
+//             </p>
+//         </div>
+//     `
+//     scrollToEnd();
+// }
+function postarMensagem(clique){
+    const input = document.querySelector(".mensagemDigitada");
+    const textoDigitado = input.value;
+
+    if (textoDigitado !== "") {
+        const objeto = {
+            from: usuarioLogado,
+            to: "Todos",
+            text: textoDigitado,
+            type: "mensage"
+        }
+        const enviarNovaMensagem = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages", objeto); 
+        enviarNovaMensagem.then(processarRespostas);
+        enviarNovaMensagem.catch(erroPostMensagem);
+    }
+}
+function erroPostMensagem(resposta){
+    console.log("deu ruim ao postar resposta" + resposta);
+}
+
+function scrollToEnd() {
     const mensagemParaScrollar = document.querySelector(".scroll");
     mensagemParaScrollar.scrollIntoView();
     mensagemParaScrollar.classList.remove("scroll");
