@@ -1,17 +1,57 @@
+
 let usuarioLogado;
 let horarioDoEnvio;
 let mensagemEnviada;
-
 
 entrarNaSala();
 atualizarPagina();
 setInterval(atualizarPagina, 3000);
 
+function entrarNaSala() {
+    const login = prompt("Bem Vindo ao bate-bapo UOL. \nQual seu nome?");
+    usuarioLogado = login;
+    const participante = {
+        name: login
+    }
+    const requisicao = axios.post("https://mock-api.driven.com.br/api/v4/uol/participants", participante);
+    requisicao.then(validarUsuario);
+    requisicao.catch(validacaoDeUsuarioFalhou);
+
+    setInterval(manterOnline,5000);
+
+}
+function validarUsuario(resposta) {
+    if (resposta.status == 400) {
+        alert("Ja existe um usuário com este nickname, por favor escolha outro nick.");
+        entrarNaSala();
+    }
+    console.log("entrou na sala");
+    atualizarPagina();
+}
+function validacaoDeUsuarioFalhou(erro) {
+    console.log("deu erro no post do nome de usuario" + erro);
+    entrarNaSala();
+}
 
 function atualizarPagina() {
     const promessa = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages");
     promessa.then(processarRespostas);
     promessa.catch(processarErroGet);
+}
+
+function manterOnline() {
+    const manterparticipante = {
+        name: usuarioLogado
+    }
+    const manterOnline = axios.post("https://mock-api.driven.com.br/api/v4/uol/status", manterparticipante);
+    manterOnline.then(taOn);
+    manterOnline.catch(taOff);
+}
+function taOn(resposta) {
+    console.log("deu bom, ta atualizando o login" + resposta);
+}
+function taOff(resposta) {
+    console.log("vish deu ruim, usuario deslogou" + resposta);
 }
 
 
@@ -109,47 +149,6 @@ function processarRespostas(respostas) {
 }
 function processarErroGet(erro) {
     console("deu ruim no GET")
-}
-
-function entrarNaSala() {
-    const login = prompt("Bem Vindo ao bate-bapo UOL. \nQual seu nome?");
-    usuarioLogado = login;
-    const participante = {
-        name: login
-    }
-    const requisicao = axios.post("https://mock-api.driven.com.br/api/v4/uol/participants", participante);
-    requisicao.then(validarUsuario);
-    requisicao.catch(validacaoDeUsuarioFalhou);
-
-    setInterval(manterOnline,5000);
-
-}
-function validarUsuario(resposta) {
-    if (resposta.status == 400) {
-        alert("Ja existe um usuário com este nickname, por favor escolha outro nick.");
-        entrarNaSala();
-    }
-    console.log("entrou na sala");
-    atualizarPagina();
-}
-function validacaoDeUsuarioFalhou(erro) {
-    console.log("deu erro no post do nome de usuario" + erro);
-    entrarNaSala();
-}
-
-function manterOnline() {
-    const manterparticipante = {
-        name: usuarioLogado
-    }
-    const manterOnline = axios.post("https://mock-api.driven.com.br/api/v4/uol/status", manterparticipante);
-    manterOnline.then(taOn);
-    manterOnline.catch(taOff);
-}
-function taOn(resposta) {
-    console.log("deu bom, ta atualizando o login" + resposta);
-}
-function taOff(resposta) {
-    console.log("vish deu ruim, usuario deslogou" + resposta);
 }
 
 function postarMensagem(clique) {

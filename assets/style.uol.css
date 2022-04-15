@@ -4,6 +4,10 @@
 body{
     background: #E5E5E5;
 }
+.feed{
+    padding-bottom: 80px;
+
+}
 header{
     background: #FFFFFF;
     height: 80px;
@@ -64,10 +68,6 @@ main{
 .usuario{
     font-weight: 700;
 }
-.fantasma{
-    height: 80px;
-}
-
 
 footer{
     background: #FFFFFF;
