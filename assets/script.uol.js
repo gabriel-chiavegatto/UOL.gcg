@@ -180,3 +180,11 @@ function scrollToEnd() {
         mensagemParaScrollar.classList.remove("scroll");
     }
 }
+
+const input = document.getElementById("myInput");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("myButton").click();
+  }
+});
