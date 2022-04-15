@@ -3,22 +3,31 @@ let usuarioLogado;
 let horarioDoEnvio;
 let mensagemEnviada;
 
-entrarNaSala();
-atualizarPagina();
-setInterval(atualizarPagina, 3000);
+const input = document.getElementById("myInput");
+input.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("myButton").click();
+    }
+});
 
 function entrarNaSala() {
-    const login = prompt("Bem Vindo ao bate-bapo UOL. \nQual seu nome?");
-    usuarioLogado = login;
-    const participante = {
-        name: login
-    }
-    const requisicao = axios.post("https://mock-api.driven.com.br/api/v4/uol/participants", participante);
-    requisicao.then(validarUsuario);
-    requisicao.catch(validacaoDeUsuarioFalhou);
+    const login = document.querySelector(".user-name").value;
+    console.log(login);
+    if (login != null) {
+        const participante = {
+            name: login
+        }
+        const requisicao = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", participante);
+        requisicao.then(validarUsuario);
+        requisicao.catch(validacaoDeUsuarioFalhou);
 
-    setInterval(manterOnline,5000);
+        setInterval(manterOnline, 5000);
 
+        atualizarPagina();
+        setInterval(atualizarPagina, 3000);
+        usuarioLogado = login;
+    } else {console.log("false")}
 }
 function validarUsuario(resposta) {
     if (resposta.status == 400) {
@@ -34,32 +43,24 @@ function validacaoDeUsuarioFalhou(erro) {
 }
 
 function atualizarPagina() {
-    const promessa = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages");
+    const promessa = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
     promessa.then(processarRespostas);
     promessa.catch(processarErroGet);
 }
-
-function manterOnline() {
-    const manterparticipante = {
-        name: usuarioLogado
-    }
-    const manterOnline = axios.post("https://mock-api.driven.com.br/api/v4/uol/status", manterparticipante);
-    manterOnline.then(taOn);
-    manterOnline.catch(taOff);
+function processarErroGet(erro) {
+    console("deu ruim no GET")
 }
-function taOn(resposta) {
-    console.log("deu bom, ta atualizando o login" + resposta);
-}
-function taOff(resposta) {
-    console.log("vish deu ruim, usuario deslogou" + resposta);
-}
-
 
 function processarRespostas(respostas) {
     // console.log(respostas);
     const main = document.querySelector(".feed");
-    main.innerHTML = "";
     const ultimoElemento = (respostas.data.length) - 1;
+
+    const abrirChat = document.querySelector(".chat");
+    const fechaLogin = document.querySelector(".login");
+    abrirChat.classList.remove("escondido");
+    fechaLogin.classList.add("escondido");
+
     for (i = 0; i < ultimoElemento; i++) {
 
         if (respostas.data[i].type === "status") {
@@ -147,9 +148,7 @@ function processarRespostas(respostas) {
     // scrollar e tirar a classe scroll
     scrollToEnd();
 }
-function processarErroGet(erro) {
-    console("deu ruim no GET")
-}
+
 
 function postarMensagem(clique) {
     const input = document.querySelector(".mensagemDigitada");
@@ -161,12 +160,12 @@ function postarMensagem(clique) {
         text: `${textoDigitado}`,
         type: "message"
     }
-    const enviarNovaMensagem = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages", objetoMensagem);
+    const enviarNovaMensagem = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", objetoMensagem);
     enviarNovaMensagem.then(okPostMensagem);
     enviarNovaMensagem.catch(erroPostMensagem);
     input.value = "";
 }
-function okPostMensagem(){
+function okPostMensagem() {
     atualizarPagina();
 }
 function erroPostMensagem(resposta) {
@@ -181,10 +180,23 @@ function scrollToEnd() {
     }
 }
 
-const input = document.getElementById("myInput");
-input.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-   event.preventDefault();
-   document.getElementById("myButton").click();
-  }
-});
+
+function abrirSideBar() {
+    const sideBar = document.querySelector(".participantes");
+    sideBar.classList.remove("escondido");
+}
+
+function manterOnline() {
+    const manterparticipante = {
+        name: usuarioLogado
+    }
+    const manterOnline = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", manterparticipante);
+    manterOnline.then(taOn);
+    manterOnline.catch(taOff);
+}
+function taOn(resposta) {
+    console.log("coneccted" + resposta);
+}
+function taOff(resposta) {
+    console.log("error, fell out of chat" + resposta);
+}

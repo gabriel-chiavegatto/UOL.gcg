@@ -15,19 +15,28 @@
 </head>
 
 <body>
+    <main class="chat escondido">
+        <header class="">
+            <img src="./assets/logo 1.png" alt="logo-UOL">
+            <ion-icon onclick="abrirSideBar()" name="people"></ion-icon>
+        </header>
+        <section class="feed ">
+        </section>
+        <footer class="send-message ">
+            <input class="mensagemDigitada" type="text" id="myInput" placeholder="Escreva aqui...">
+            <button onclick="postarMensagem(this)" id="myButton" data-identifier="send-message">
+                <ion-icon name="paper-plane-outline"></ion-icon>
+            </button>
+        </footer>
+    </main>
 
-    <header>
-        <img src="./assets/logo 1.png" alt="logo-UOL">
-        <ion-icon name="people"></ion-icon>
-    </header>
-    <aside class></aside>
-    <main class="feed"></main>
-    <footer>
-        <input class="mensagemDigitada" type="text" id="myInput" placeholder="Escreva aqui...">
-        <button onclick="postarMensagem(this)" id="myButton" data-identifier="send-message">
-            <ion-icon name="paper-plane-outline"></ion-icon>
-        </button>
-    </footer>
+    <aside class="login">
+        <div class="block">
+            <div class="flex-center"><img src="./assets/logo 1.png" alt="logo-UOL"></div>
+            <input class="user-name" type="text" placeholder="Digite seu nome" id="name">
+            <div class="flex-center"><button onclick="entrarNaSala()">Entrar</button></div>
+        </div>
+    </aside>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
