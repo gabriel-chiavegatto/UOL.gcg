@@ -15,8 +15,15 @@
 </head>
 
 <body>
+    <aside class="login">
+        <div class="block">
+            <div class="flex-center"><img src="./assets/logo 1.png" alt="logo-UOL"></div>
+            <input class="user-name" type="text" placeholder="Digite seu nome" id="name">
+            <div class="flex-center"><button onclick="entrarNaSala()">Entrar</button></div>
+        </div>
+    </aside>
     <main class="chat escondido">
-        <header class="">
+        <header class="header">
             <img src="./assets/logo 1.png" alt="logo-UOL">
             <ion-icon onclick="abrirSideBar()" name="people"></ion-icon>
         </header>
@@ -29,14 +36,8 @@
             </button>
         </footer>
     </main>
-
-    <aside class="login">
-        <div class="block">
-            <div class="flex-center"><img src="./assets/logo 1.png" alt="logo-UOL"></div>
-            <input class="user-name" type="text" placeholder="Digite seu nome" id="name">
-            <div class="flex-center"><button onclick="entrarNaSala()">Entrar</button></div>
-        </div>
-    </aside>
+   
+    <main class="aside-participantes"></main>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
