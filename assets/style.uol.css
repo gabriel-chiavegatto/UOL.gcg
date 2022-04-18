@@ -184,7 +184,7 @@ footer button ion-icon{
     top: 0;
     right: 0;
     height: 100vh;
-    width: 300px;
+    width: 259px;
     background-color: greenyellow;
 }
 .flex-center{
@@ -192,7 +192,32 @@ footer button ion-icon{
     display: flex;
     justify-content: center;
 }
-
+.aside h1{
+    width: 259px;
+    height: 84px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #000000;
+}
+.pessoas div{
+    width: 100%;
+    height: 36px;
+    padding-left: 18px;
+    padding-right: 17px;
+    display: flex;
+    align-items: center;
+}
+.pessoas img{
+    width: 25px;
+    height: 25px;
+    margin-right: 6px;
+}
 
 
 
