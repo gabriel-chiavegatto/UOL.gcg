@@ -8,6 +8,10 @@ body{
 .chat{
     width: 100%;
     height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
 }
 .feed{
     padding-top: 80px;
@@ -35,6 +39,9 @@ header ion-icon{
     position: absolute;
     top: 18px;
     right: 21px;
+}
+ion-icon:hover{
+    cursor: pointer;
 }
 main{
     padding-top: 106px;
@@ -159,17 +166,31 @@ footer button ion-icon{
 
 
 .participantes{
-    background-color: rgb(8, 172, 8, .6);
-    height: 100px;
-    width: 100px;
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    position: relative;
+}
+.voltar-chat{
+    background-color: rgb(0, 0, 0, );
+    width: 100%;
+    height: 100vh;
+}
+.aside{
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 300px;
+    background-color: greenyellow;
 }
 .flex-center{
     width: 100%;
     display: flex;
     justify-content: center;
-}
-aside{
-    
 }
 
 

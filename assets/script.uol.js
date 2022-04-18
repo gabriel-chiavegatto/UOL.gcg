@@ -3,6 +3,14 @@ let usuarioLogado;
 let horarioDoEnvio;
 let mensagemEnviada;
 
+const sigIn = document.getElementById("name");
+sigIn.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("button-entrar").click();
+    }
+});
+
 const input = document.getElementById("myInput");
 input.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
@@ -11,10 +19,11 @@ input.addEventListener("keyup", function (event) {
     }
 });
 
+
 function entrarNaSala() {
     const login = document.querySelector(".user-name").value;
-    console.log(login);
     if (login != null) {
+        console.log("Seu usuário é:", login);
         const participante = {
             name: login
         }
@@ -22,19 +31,22 @@ function entrarNaSala() {
         requisicao.then(validarUsuario);
         requisicao.catch(validacaoDeUsuarioFalhou);
 
-        setInterval(manterOnline, 5000);
 
         atualizarPagina();
-        setInterval(atualizarPagina, 3000);
+        setInterval(() => { atualizarPagina(); manterOnline(); }, 3000);
         usuarioLogado = login;
-    } else {console.log("false")}
+    } else return;
 }
+
+
 function validarUsuario(resposta) {
     if (resposta.status == 400) {
         alert("Ja existe um usuário com este nickname, por favor escolha outro nick.");
         entrarNaSala();
     }
     console.log("entrou na sala");
+    const abrirChat = document.querySelector(".chat");
+    abrirChat.classList.remove("escondido");
     atualizarPagina();
 }
 function validacaoDeUsuarioFalhou(erro) {
@@ -56,9 +68,7 @@ function processarRespostas(respostas) {
     const main = document.querySelector(".feed");
     const ultimoElemento = (respostas.data.length) - 1;
 
-    const abrirChat = document.querySelector(".chat");
     const fechaLogin = document.querySelector(".login");
-    abrirChat.classList.remove("escondido");
     fechaLogin.classList.add("escondido");
 
     for (i = 0; i < ultimoElemento; i++) {
@@ -89,19 +99,25 @@ function processarRespostas(respostas) {
         `
         }
 
-        if (respostas.data[i].type === "private_message") {
-            main.innerHTML += `
-         <div class="caixaMensagem privada" data-identifier="message"> 
-            <p>
-                <span class="hora">(${respostas.data[i].time})</span>
-                <span class="usuario remetente">${respostas.data[i].from}</span>   
-                <span class="paraQuem">reservadamente para</span>
-                <span class="usuario destinatário">${respostas.data[i].to}</span>: 
-                <span class="texto">${respostas.data[i].text}</span> 
-            </p>
-        </div>
-        `
-        }
+        // if (respostas.data[i].type === "private_message") {
+
+        //     // https://mock-api.driven.com.br/api/v6/uol/participants
+        //     const listaParticipantes = axios.get("https://mock-api.driven.com.br/api/v6/uol/participants");
+        //     listaParticipantes.then( promesaCumprida => console.log("puxou a data", promesaCumprida.data));
+        //     listaParticipantes.catch( erro =>  console("erro na lista de participantes"));
+
+        //     main.innerHTML += `
+        //  <div class="caixaMensagem privada" data-identifier="message"> 
+        //     <p>
+        //         <span class="hora">(${respostas.data[i].time})</span>
+        //         <span class="usuario remetente">${respostas.data[i].from}</span>   
+        //         <span class="paraQuem">reservadamente para</span>
+        //         <span class="usuario destinatário">${respostas.data[i].to}</span>: 
+        //         <span class="texto">${respostas.data[i].text}</span> 
+        //     </p>
+        // </div>
+        // `
+        // }
     }
 
     // ultimo elemento para scrollar
@@ -132,19 +148,22 @@ function processarRespostas(respostas) {
         `
     }
 
-    if (respostas.data[ultimoElemento].type === "private_message") {
-        main.innerHTML += `
-         <div class="caixaMensagem privada scroll" data-identifier="message"> 
-            <p>
-                <span class="hora">(${respostas.data[ultimoElemento].time})</span>
-                <span class="usuario remetente">${respostas.data[ultimoElemento].from}</span>   
-                <span class="paraQuem">reservadamente para</span>
-                <span class="usuario destinatário">${respostas.data[ultimoElemento].to}</span>: 
-                <span class="texto">${respostas.data[ultimoElemento].text}</span> 
-            </p>
-        </div>
-        `
-    }
+    // if (respostas.data[ultimoElemento].type === "private_message") {
+    //     main.innerHTML += `
+    //      <div class="caixaMensagem privada scroll" data-identifier="message"> 
+    //         <p>
+    //             <span class="hora">(${respostas.data[ultimoElemento].time})</span>
+    //             <span class="usuario remetente">${respostas.data[ultimoElemento].from}</span>   
+    //             <span class="paraQuem">reservadamente para</span>
+    //             <span class="usuario destinatário">${respostas.data[ultimoElemento].to}</span>: 
+    //             <span class="texto">${respostas.data[ultimoElemento].text}</span> 
+    //         </p>
+    //     </div>
+    //     `
+    // }
+
+
+
     // scrollar e tirar a classe scroll
     scrollToEnd();
 }
@@ -181,11 +200,6 @@ function scrollToEnd() {
 }
 
 
-function abrirSideBar() {
-    const sideBar = document.querySelector(".participantes");
-    sideBar.classList.remove("escondido");
-}
-
 function manterOnline() {
     const manterparticipante = {
         name: usuarioLogado
@@ -198,5 +212,20 @@ function taOn(resposta) {
     console.log("coneccted" + resposta);
 }
 function taOff(resposta) {
-    console.log("error, fell out of chat" + resposta);
+    console.log("error, fell out of chat. " + resposta);
+}
+
+function abrirSideBar() {
+    console.log("botao funcionando");
+    const sideBar = document.querySelector(".participantes");
+    sideBar.classList.remove("escondido");
+    const telaChat = document.querySelector(".chat");
+    telaChat.classList.add("escondido");
+}
+function voltarChat() {
+    console.log("voltar funcionando");
+    const sideBar = document.querySelector(".participantes");
+    sideBar.classList.add("escondido");
+    const telaChat = document.querySelector(".chat");
+    telaChat.classList.remove("escondido");
 }

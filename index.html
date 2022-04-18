@@ -15,13 +15,13 @@
 </head>
 
 <body>
-    <aside class="login">
+    <article class="login">
         <div class="block">
             <div class="flex-center"><img src="./assets/logo 1.png" alt="logo-UOL"></div>
             <input class="user-name" type="text" placeholder="Digite seu nome" id="name">
-            <div class="flex-center"><button onclick="entrarNaSala()">Entrar</button></div>
+            <div class="flex-center"><button id="button-entrar" onclick="entrarNaSala()">Entrar</button></div>
         </div>
-    </aside>
+    </article>
     <main class="chat escondido">
         <header class="header">
             <img src="./assets/logo 1.png" alt="logo-UOL">
@@ -36,8 +36,32 @@
             </button>
         </footer>
     </main>
-   
-    <main class="aside-participantes"></main>
+    <div class="participantes escondido">
+        <div class="voltar-chat" onclick="voltarChat()"></div>
+        <aside class="aside">
+            <div class="conteudo">
+                <h1>Escolha um contato para enviar mensagem:</h1>
+                <section class="pessoas"></section>
+                <h1>Escolha a visibilidade:</h1>
+                <div>
+                    <img src="./assets/person.png" alt="icon">
+                    <h2>Público</h2>
+                </div>
+                <div>
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                    <h2>Reservadamente</h2>
+                </div>
+                <ul>
+                    <div>
+                        <img src="" alt="">
+                        <p></p>
+                    </div>
+                </ul>
+
+                <section class="visibilidade"></section>
+            </div>
+        </aside>
+    </div>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
